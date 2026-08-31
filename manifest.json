@@ -1,0 +1,22 @@
+{
+  "name": "RADIO MAGIA Y POESIA",
+  "short_name": "Magia y Poesia",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#ff007f",
+  "icons": [
+    {
+      "src": "https://i.postimg.cc/4dYfKmV9/logo2.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://i.postimg.cc/4dYfKmV9/logo2.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ]
+}
