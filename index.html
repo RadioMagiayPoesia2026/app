@@ -5,15 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>RADIO MAGIA Y POESIA</title>
 
-  <!-- Enlace a Manifest Físico Obligatorio -->
+  <!-- Enlace al Manifest de la App -->
   <link rel="manifest" href="./manifest.json">
   <meta name="theme-color" content="#ff007f">
+  
+  <!-- Configuración para iOS (iPhone / iPad) -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Magia y Poesia">
   <link rel="apple-touch-icon" href="https://i.postimg.cc/4dYfKmV9/logo2.jpg">
   
-  <!-- Carga de Librerías -->
+  <!-- Librerías -->
   <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
   <script src="https://extassisnetwork.com/player/Luna/luna.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -190,10 +192,10 @@
       100% { transform: translateX(-50%); }
     }
 
-    /* Tarjetas de DJs Oscuras */
+    /* Tarjetas DJs Oscuras */
     .dj-card {
-      background: rgba(0, 0, 0, 0.5); /* Fondo oscuro semi-transparente */
-      backdrop-filter: blur(6px);       /* Efecto cristal oscuro */
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(6px);
       border-radius: 12px;
       padding: 8px 12px;
       display: flex;
@@ -212,7 +214,6 @@
       border: 2px solid var(--neon-color);
     }
 
-    /* Nombre DJ Neón */
     .dj-name {
       font-size: 13px;
       font-weight: 700;
@@ -258,14 +259,16 @@
   </div>
 
   <script>
-    // Registro SW
+    // Registro del Service Worker para PWA
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js');
+        navigator.serviceWorker.register('./sw.js')
+          .then(reg => console.log('SW registrado con éxito', reg))
+          .catch(err => console.log('Error al registrar SW', err));
       });
     }
 
-    // Evento de Instalación Directa
+    // Manejador del botón de instalación
     let deferredPrompt;
     const btnInstall = document.getElementById('btnInstall');
 
@@ -284,15 +287,16 @@
         }
         deferredPrompt = null;
       } else {
-        alert("Atención:\n\n1. Asegúrate de estar probando el sitio desde tu servidor HTTPS (ej. Netlify/Vercel) y no desde un archivo local.\n2. Si la app ya la instalaste previamente en tu PC, el navegador oculta el evento hasta que la desinstales.");
+        alert("Instrucciones para instalar:\n\n• En Android (Chrome): Toca el menú (⋮) y selecciona 'Instalar aplicación' o 'Agregar a la pantalla principal'.\n• En iPhone (Safari): Toca el botón Compartir (↑) y elige 'Agregar a inicio'.");
       }
     });
 
+    // Ocultar botón si la web ya corre dentro de la App instalada
     if (window.matchMedia('(display-mode: standalone)').matches || navigator.standalone) {
       btnInstall.style.display = 'none';
     }
 
-    // Player
+    // Configuración Reproductor
     $("#extassisnetwork").lunaradio({
       streamurl: "https://streaming.viphosting.cl:8236",
       radioname: "MAGIA Y POESIA",
@@ -317,7 +321,7 @@
       usestreamcorsproxy: "true",
     });
 
-    // Contador Oyentes
+    // Contador de Oyentes
     function actualizarOyentes() {
       $.ajax({
         url: "https://streaming.viphosting.cl:8236/stats?json=1",
@@ -331,7 +335,7 @@
     actualizarOyentes();
     setInterval(actualizarOyentes, 10000);
 
-    // Supabase DJs
+    // Carga de DJs desde Supabase
     const { createClient } = supabase;
     const _supabase = createClient('https://sxgrplnocgbqzprlufas.supabase.co', 'sb_publishable_6kLCYGH8swAJIieVZwEGRQ_weWCCn_R');
 
