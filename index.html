@@ -9,7 +9,7 @@
   <link rel="manifest" href="./manifest.json">
   <meta name="theme-color" content="#ff007f">
   
-  <!-- Configuración para iOS (iPhone / iPad) -->
+  <!-- Configuración para iOS -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Magia y Poesia">
@@ -49,10 +49,10 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
       width: 100vw;
       min-height: 100vh;
-      padding: 20px 0;
+      padding: 20px 0 40px 0;
       box-sizing: border-box;
       position: relative;
     }
@@ -152,6 +152,7 @@
       overflow: hidden;
     }
 
+    /* Sección DJs */
     .djs-section {
       width: 95%;
       max-width: 1200px;
@@ -164,11 +165,11 @@
       border-radius: 12px;
     }
 
-    .djs-section h3 {
+    .djs-section h3, .history-section h3 {
       font-size: 13px;
       letter-spacing: 2px;
       color: #ffffff;
-      margin: 0 0 10px 0;
+      margin: 0 0 12px 0;
       text-transform: uppercase;
       text-shadow: 0 0 8px rgba(0,0,0,0.8);
     }
@@ -192,7 +193,6 @@
       100% { transform: translateX(-50%); }
     }
 
-    /* Tarjetas DJs Oscuras */
     .dj-card {
       background: rgba(0, 0, 0, 0.5);
       backdrop-filter: blur(6px);
@@ -222,6 +222,76 @@
       letter-spacing: 1px;
       text-shadow: 0 0 5px #ff007f, 0 0 10px #ff007f, 0 0 15px #ff007f;
     }
+
+    /* Sección Historial de Canciones */
+    .history-section {
+      width: 95%;
+      max-width: 1200px;
+      margin-top: 15px;
+      text-align: center;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(10px);
+      padding: 15px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 0, 127, 0.4);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+      box-sizing: border-box;
+    }
+
+    .history-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 280px;
+      overflow-y: auto;
+      padding-right: 5px;
+    }
+
+    .history-list::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    .history-list::-webkit-scrollbar-thumb {
+      background: var(--neon-color);
+      border-radius: 10px;
+    }
+
+    .song-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 8px 14px;
+      border-radius: 10px;
+      border-left: 3px solid var(--neon-color);
+      text-align: left;
+      transition: background 0.3s ease;
+    }
+
+    .song-item:hover {
+      background: rgba(255, 0, 127, 0.15);
+    }
+
+    .song-icon {
+      font-size: 16px;
+      color: #39ff14;
+    }
+
+    .song-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #ffffff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .song-time {
+      font-size: 11px;
+      color: #aaa;
+      margin-left: auto;
+      white-space: nowrap;
+    }
   </style>
 </head>
 <body>
@@ -248,6 +318,7 @@
       <div id="extassisnetwork"></div>
     </div>
 
+    <!-- Sección DJs -->
     <div class="djs-section">
       <h3>NUESTROS DJS...</h3>
       <div class="djs-track-container">
@@ -256,19 +327,25 @@
         </div>
       </div>
     </div>
+
+    <!-- Historial de 10 Últimas Canciones -->
+    <div class="history-section">
+      <h3>🎵 ÚLTIMOS 10 TEMAS SONADOS</h3>
+      <div class="history-list" id="historyList">
+        <p style="color: #aaa; font-size: 13px; padding: 10px;">Cargando historial de canciones...</p>
+      </div>
+    </div>
   </div>
 
   <script>
-    // Registro del Service Worker para PWA
+    // Registro Service Worker
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js')
-          .then(reg => console.log('SW registrado con éxito', reg))
-          .catch(err => console.log('Error al registrar SW', err));
+        navigator.serviceWorker.register('./sw.js');
       });
     }
 
-    // Manejador del botón de instalación
+    // Instalación
     let deferredPrompt;
     const btnInstall = document.getElementById('btnInstall');
 
@@ -287,16 +364,15 @@
         }
         deferredPrompt = null;
       } else {
-        alert("Instrucciones para instalar:\n\n• En Android (Chrome): Toca el menú (⋮) y selecciona 'Instalar aplicación' o 'Agregar a la pantalla principal'.\n• En iPhone (Safari): Toca el botón Compartir (↑) y elige 'Agregar a inicio'.");
+        alert("Instrucciones para instalar:\n\n• En Android: Toca (⋮) y elige 'Instalar aplicación'.\n• En iPhone: Toca Compartir (↑) y elige 'Agregar a inicio'.");
       }
     });
 
-    // Ocultar botón si la web ya corre dentro de la App instalada
     if (window.matchMedia('(display-mode: standalone)').matches || navigator.standalone) {
       btnInstall.style.display = 'none';
     }
 
-    // Configuración Reproductor
+    // Reproductor
     $("#extassisnetwork").lunaradio({
       streamurl: "https://streaming.viphosting.cl:8236",
       radioname: "MAGIA Y POESIA",
@@ -335,7 +411,43 @@
     actualizarOyentes();
     setInterval(actualizarOyentes, 10000);
 
-    // Carga de DJs desde Supabase
+    // Obtener Historial de los Últimos 10 Temas
+    function cargarHistorialCanciones() {
+      $.ajax({
+        url: "https://streaming.viphosting.cl:8236/played?type=json",
+        dataType: "jsonp",
+        success: function(data) {
+          const container = document.getElementById('historyList');
+          if (Array.isArray(data) && data.length > 0) {
+            let html = '';
+            // Tomamos máximo 10 elementos
+            const temas = data.slice(0, 10);
+            temas.forEach(item => {
+              const date = item.playedat ? new Date(item.playedat * 1000) : null;
+              const hora = date ? date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
+              
+              html += `
+                <div class="song-item">
+                  <span class="song-icon">🎶</span>
+                  <span class="song-title">${item.title || 'Tema desconocido'}</span>
+                  ${hora ? `<span class="song-time">${hora}</span>` : ''}
+                </div>`;
+            });
+            container.innerHTML = html;
+          } else {
+            container.innerHTML = '<p style="color: #aaa; font-size: 13px;">No hay historial disponible por ahora.</p>';
+          }
+        },
+        error: function() {
+          document.getElementById('historyList').innerHTML = '<p style="color: #aaa; font-size: 13px;">Historial no disponible temporalmente.</p>';
+        }
+      });
+    }
+
+    cargarHistorialCanciones();
+    setInterval(cargarHistorialCanciones, 15000);
+
+    // Supabase DJs
     const { createClient } = supabase;
     const _supabase = createClient('https://sxgrplnocgbqzprlufas.supabase.co', 'sb_publishable_6kLCYGH8swAJIieVZwEGRQ_weWCCn_R');
 
