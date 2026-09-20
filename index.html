@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RADIO MAGIA Y POESIA</title>
+  
+  <!-- Configuración PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#120c1f">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Radio Magia & Poesia">
+  <link rel="apple-touch-icon" href="https://i.postimg.cc/4dYfKmV9/logo2.jpg">
+  
+  <!-- Fuentes Google -->
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- Íconos FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="https://extassisnetwork.com/player/Luna/luna.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    :root { 
+      --neon-color: #39ff14; 
+      --pink-neon: #ff007f;
+      --dark-border: #1a1528;
+    }
+    html, body {
+      margin: 0; padding: 0; width: 100%; height: 100%;
+      background: linear-gradient(135deg, #0d0914, #180e29, #0a192f, #1a0826);
+      background-size: 400% 400%;
+      animation: bgGradientAnimation 15s ease infinite;
+      font-family: 'Be Vietnam', sans-serif; color: #ffffff; overflow-x: hidden;
+    }
+    @keyframes bgGradientAnimation {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    
+    .main-container {
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; 
+      justify-content: flex-start;
+      width: 100vw; 
+      min-height: 100vh; 
+      padding: 10px; 
+      box-sizing: border-box; 
+      position: relative;
+      gap: 12px;
+    }
+
+    /* BANNER SUPERIOR */
+    .live-dj-banner {
+      width: 100%; 
+      max-width: 100%; 
+      background: rgba(15, 12, 25, 0.85);
+      border: 2px solid var(--dark-border); 
+      border-radius: 12px; 
+      padding: 12px 16px; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      box-sizing: border-box;
+      backdrop-filter: blur(10px); 
+      position: relative; 
+      gap: 8px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+    }
+
+    /* CONTENEDOR DEL REPRODUCTOR */
+    .player-wrapper {
+      width: 100%; 
+      max-width: 100%; 
+      background: rgba(15, 12, 25, 0.7);
+      border-radius: 16px; 
+      padding: 15px 10px 15px 10px; 
+      box-sizing: border-box;
+      position: relative; 
+      border: 2px solid var(--dark-border); 
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    .brand-title-container { 
+      display: flex; flex-direction: column; align-items: center; justify-content: center; 
+      gap: 6px; text-align: center; width: 100%;
+    }
+
+    .brand-header-row {
+      display: inline-flex; align-items: center; justify-content: center; gap: 12px;
+    }
+
+    .brand-icon { 
+      font-size: 28px; filter: drop-shadow(0 0 8px var(--pink-neon)); 
+      animation: floatIcon 2s ease-in-out infinite alternate; flex-shrink: 0; 
+    }
+    @keyframes floatIcon { 0% { transform: translateY(0) scale(1); } 100% { transform: translateY(-4px) scale(1.1); } }
+    
+    /* TÍTULO EN ESTILO ARCOÍRIS */
+    .brand-title {
+      font-family: 'Be Vietnam', sans-serif;
+      font-size: 34px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      background: linear-gradient(90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #00ffff, #0000ff, #8b00ff, #ff0000);
+      background-size: 300% 100%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: rainbowText 4s linear infinite;
+      filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+      margin: 0;
+      text-align: center;
+      line-height: 1.15;
+    }
+    
+    .live-listeners-count {
+      font-size: 12px; color: #dddddd; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      background: rgba(0, 0, 0, 0.5); padding: 4px 12px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.15); margin-top: 2px;
+    }
+    .live-listeners-count span { color: var(--neon-color); font-weight: 800; }
+
+    /* CONTENEDOR DE LUNA RADIO */
+    #extassisnetwork { 
+      width: 100%; 
+      height: 400px !important; 
+      border-radius: 12px; 
+      overflow: hidden; 
+      position: relative;
+      z-index: 1;
+    }
+
+    /* OCULTA EL TEXTO ORIGINAL DE LUNA RADIO */
+    #extassisnetwork .songtitle,
+    #extassisnetwork .song,
+    #extassisnetwork .artist,
+    #extassisnetwork .title,
+    #extassisnetwork [class*="song"],
+    #extassisnetwork [class*="artist"],
+    #extassisnetwork [class*="title"] {
+      display: none !important;
+      visibility: hidden !important;
+      opacity: 0 !important;
+      height: 0 !important;
+    }
+
+    /* ANUNCIADOR SIN CUADRO, DIRECTO SOBRE EL REPRODUCTOR */
+    .custom-song-display {
+      position: absolute;
+      top: 235px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      z-index: 99;
+      background: transparent; /* Sin fondo */
+      border: none; /* Sin borde */
+      box-shadow: none; /* Sin sombra de cuadro */
+      text-align: center;
+      box-sizing: border-box;
+      pointer-events: none;
+    }
+
+    .song-label-indicator {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--neon-color);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.9));
+    }
+
+    .song-label-indicator::before,
+    .song-label-indicator::after {
+      content: '';
+      display: inline-block;
+      width: 5px; height: 5px;
+      background: var(--neon-color);
+      border-radius: 50%;
+      box-shadow: 0 0 6px var(--neon-color);
+      animation: pulseDot 1.5s infinite;
+    }
+    @keyframes pulseDot { 0%, 100% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); } }
+
+    .current-song-text {
+      font-size: 16px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      line-height: 1.2;
+      background: linear-gradient(90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #00ffff, #0000ff, #8b00ff, #ff0000);
+      background-size: 300% 100%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: rainbowText 4s linear infinite;
+      filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.9)); /* Sombra para que resalte sobre el fondo */
+      margin: 0;
+      word-break: break-word;
+    }
+
+    @keyframes rainbowText {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 300% 50%; }
+    }
+
+    /* REDES SOCIALES FLOTANTES CON EFECTO ARCOÍRIS */
+    .player-social-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 32px;
+      padding: 12px 10px 4px 10px;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      z-index: 10;
+      position: relative;
+    }
+    
+    .player-social-link {
+      font-size: 34px;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      background: linear-gradient(90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #00ffff, #0000ff, #8b00ff, #ff0000);
+      background-size: 300% 100%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: floatSocial 3s ease-in-out infinite alternate, rainbowText 4s linear infinite;
+      filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.3));
+    }
+
+    @keyframes floatSocial {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-4px); }
+    }
+
+    .player-social-link:nth-child(2) { animation-delay: 0.3s; }
+    .player-social-link:nth-child(3) { animation-delay: 0.6s; }
+    .player-social-link:nth-child(4) { animation-delay: 0.9s; }
+
+    .player-social-link:hover {
+      transform: translateY(-8px) scale(1.35) rotate(-6deg);
+      filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.8)) drop-shadow(0 0 20px rgba(0, 243, 255, 0.6));
+    }
+
+    .top-right-controls { position: fixed; top: 20px; right: 20px; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; z-index: 9999; }
+    .btn-install {
+      background: rgba(15, 12, 25, 0.85); border: 1.5px solid var(--dark-border); color: #ffffff;
+      padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: bold; cursor: pointer;
+      display: none; align-items: center; gap: 6px; backdrop-filter: blur(5px); box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    @media (max-width: 768px) {
+      .brand-title { font-size: 22px; letter-spacing: 1px; }
+      .brand-icon { font-size: 20px; }
+      .brand-header-row { gap: 6px; }
+      .live-dj-banner { flex-direction: column; text-align: center; }
+      #extassisnetwork { height: 360px !important; }
+
+      .custom-song-display { top: 210px; }
+      .current-song-text { font-size: 14px; }
+      .player-social-container { gap: 22px; }
+      .player-social-link { font-size: 28px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="top-right-controls">
+    <button class="btn-install" id="btnInstall">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+      </svg>
+      Instalar App
+    </button>
+  </div>
+
+  <div class="main-container">
+    <!-- Banner superior -->
+    <div class="live-dj-banner" id="liveDjBanner">
+      <div class="brand-title-container">
+        <div class="brand-header-row">
+          <span class="brand-icon">🎙️✨</span>
+          <h1 class="brand-title">Radio Magia y Poesia</h1>
+          <span class="brand-icon">🎵✨</span>
+        </div>
+        <div class="live-listeners-count">🎧 Oyentes: <span id="listenersCount">0</span></div>
+      </div>
+    </div>
+
+    <!-- Contenedor principal del reproductor -->
+    <div class="player-wrapper" id="playerWrapper">
+      
+      <!-- REPRODUCTOR -->
+      <div id="extassisnetwork"></div>
+
+      <!-- ANUNCIADOR SIN CUADRO, DIRECTO SOBRE EL REPRODUCTOR -->
+      <div class="custom-song-display">
+        <div class="song-label-indicator">Sonando Ahora</div>
+        <div class="current-song-text" id="liveSongTitle">Cargando Canción...</div>
+      </div>
+
+      <!-- REDES SOCIALES DEBAJO DEL REPRODUCTOR -->
+      <div class="player-social-container">
+        <a href="https://wa.me/TU_NUMERO_AQUI" target="_blank" class="player-social-link wa" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+        <a href="https://instagram.com/TU_USUARIO" target="_blank" class="player-social-link ig" title="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="https://facebook.com/TU_PAGINA" target="_blank" class="player-social-link fb" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="https://tiktok.com/@TU_USUARIO" target="_blank" class="player-social-link tk" title="TikTok"><i class="fab fa-tiktok"></i></a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* Service Worker para PWA */
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js')
+          .then(reg => console.log('Service Worker registrado con éxito:', reg.scope))
+          .catch(err => console.log('Error al registrar Service Worker:', err));
+      });
+    }
+
+    /* Evento instalación PWA */
+    let deferredPrompt;
+    const btnInstall = document.getElementById('btnInstall');
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      btnInstall.style.display = 'flex';
+    });
+
+    btnInstall.addEventListener('click', async () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+          console.log('El usuario aceptó instalar la app');
+        }
+        deferredPrompt = null;
+        btnInstall.style.display = 'none';
+      }
+    });
+
+    window.addEventListener('appinstalled', () => {
+      btnInstall.style.display = 'none';
+      console.log('App instalada correctamente');
+    });
+
+    /* Inicialización Luna Radio */
+    $("#extassisnetwork").lunaradio({
+      streamurl: "https://streaming.viphosting.cl:8236",
+      radioname: "",
+      coverimage: "https://i.postimg.cc/4dYfKmV9/logo2.jpg",
+      onlycoverimage: false,
+      userinterface: "big",
+      backgroundcolor: "rgba(15, 12, 25, 0.7)",
+      fontcolor: "#ffffff",
+      hightlightcolor: "#ff007f",
+      fontname: "Be Vietnam",
+      googlefont: "Be Vietnam",
+      fontratio: "0.8",
+      scroll: "false",
+      coverstyle: "animated",
+      usevisualizer: "real",
+      visualizertype: "6",
+      streamtype: "shoutcast2",
+      shoutcastpath: "/stream",
+      shoutcastid: "1",
+      metadatainterval: "1000",
+      volume: "100",
+      autoplay: "false",
+      usestreamcorsproxy: "true"
+    });
+
+    /* Desbloqueador de contexto de audio */
+    document.addEventListener('click', function unlockAudio() {
+      const audioElements = document.querySelectorAll('audio');
+      audioElements.forEach(audio => {
+        if (audio.paused) {
+          audio.play().catch(() => {});
+        }
+      });
+      document.removeEventListener('click', unlockAudio);
+    }, { once: true });
+
+    /* Extractor del nombre de canción directamente al anunciador */
+    setInterval(() => {
+      $("#extassisnetwork").find("div, span, p, a").each(function() {
+        const classNames = $(this).attr("class") || "";
+        const idName = $(this).attr("id") || "";
+        if (
+          classNames.includes("song") || 
+          classNames.includes("title") ||
+          idName.includes("song") ||
+          idName.includes("title")
+        ) {
+          const txt = $(this).text().trim();
+          if (txt.length > 2 && !txt.includes("RADIO BOHEMIOS")) {
+            $("#liveSongTitle").text(txt);
+          }
+        }
+      });
+    }, 800);
+
+    /* Consulta de metadatos del streaming */
+    function actualizarEstadisticas() {
+      const elementListeners = document.getElementById('listenersCount');
+
+      $.ajax({
+        url: "https://streaming.viphosting.cl:8236/stats?sid=1&json=1",
+        dataType: "jsonp",
+        jsonpCallback: "parseMusicStats",
+        timeout: 2500,
+        success: function(data) {
+          if (data) {
+            if (data.currentlisteners !== undefined) elementListeners.innerText = data.currentlisteners;
+            if (data.songtitle) $("#liveSongTitle").text(data.songtitle);
+          }
+        },
+        error: function() {
+          $.ajax({
+            url: "https://corsproxy.io/?" + encodeURIComponent("https://streaming.viphosting.cl:8236/stats?sid=1&json=1"),
+            dataType: "json",
+            timeout: 2000,
+            success: function(data) {
+              if (data) {
+                if (data.currentlisteners !== undefined) elementListeners.innerText = data.currentlisteners;
+                if (data.songtitle) $("#liveSongTitle").text(data.songtitle);
+              }
+            }
+          });
+        }
+      });
+    }
+
+    setInterval(actualizarEstadisticas, 3000);
+    actualizarEstadisticas();
+  </script>
+</body>
+</html>
