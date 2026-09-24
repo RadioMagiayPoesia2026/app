@@ -105,7 +105,6 @@
     }
     @keyframes floatIcon { 0% { transform: translateY(0) scale(1); } 100% { transform: translateY(-4px) scale(1.1); } }
     
-    /* TÍTULO MÁS GRANDE Y CON NUEVO COLOR/DEGRADADO NEÓN BRILLANTE */
     .brand-title {
       font-family: 'Be Vietnam', sans-serif;
       font-size: 44px;
@@ -123,6 +122,18 @@
       line-height: 1.15;
     }
     
+    /* CONTENEDOR DE ESTADÍSTICAS Y ESTADO (Columna Vertical) */
+    .stats-flex-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 10px;
+      z-index: 10;
+      position: relative;
+    }
+
     /* CONTADOR DE OYENTES */
     .live-listeners-count {
       font-size: 13px; 
@@ -136,12 +147,37 @@
       padding: 6px 14px; 
       border-radius: 20px; 
       border: 1px solid rgba(255, 255, 255, 0.15); 
-      margin-top: 10px;
-      z-index: 10;
-      position: relative;
       filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.9));
     }
     .live-listeners-count span { color: var(--neon-color); font-weight: 800; }
+
+    /* INDICADOR DE ESTADO EN VIVO (Ubicado debajo del contador) */
+    .stream-status-badge {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--neon-color);
+      background: rgba(0, 0, 0, 0.5);
+      padding: 5px 12px;
+      border-radius: 20px;
+      border: 1px solid rgba(57, 255, 20, 0.3);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      letter-spacing: 1px;
+      filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.9));
+    }
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      background-color: var(--neon-color);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--neon-color);
+      animation: blinkStatus 1.2s infinite ease-in-out;
+    }
+    @keyframes blinkStatus {
+      0%, 100% { opacity: 0.3; transform: scale(0.8); }
+      50% { opacity: 1; transform: scale(1.2); }
+    }
 
     /* CONTENEDOR DE LUNA RADIO */
     #extassisnetwork { 
@@ -167,7 +203,7 @@
       height: 0 !important;
     }
 
-    /* ANUNCIADOR SIN CUADRO, DIRECTO SOBRE EL REPRODUCTOR */
+    /* ANUNCIADOR DE CANCIÓN */
     .custom-song-display {
       position: absolute;
       top: 235px;
@@ -230,7 +266,103 @@
       100% { background-position: 300% 50%; }
     }
 
-    /* REDES SOCIALES FLOTANTES CON EFECTO ARCOÍRIS */
+    /* BANNER DE POESÍA ROTATIVA */
+    .poetry-banner-container {
+      width: 90%;
+      background: rgba(12, 9, 20, 0.75);
+      border: 1px solid rgba(0, 243, 255, 0.25);
+      border-radius: 12px;
+      margin-top: 10px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+      z-index: 10;
+      position: relative;
+    }
+    .poetry-icon { color: #00f3ff; font-size: 14px; filter: drop-shadow(0 0 6px #00f3ff); }
+    .poetry-text {
+      font-size: 12px;
+      font-style: italic;
+      color: #e0e0e0;
+      text-align: center;
+      transition: opacity 0.5s ease;
+      letter-spacing: 0.5px;
+    }
+
+    /* HISTORIAL DE CANCIONES */
+    .song-history-container {
+      width: 90%;
+      background: rgba(12, 9, 20, 0.85);
+      border: 1px solid rgba(255, 0, 127, 0.25);
+      border-radius: 12px;
+      margin-top: 10px;
+      overflow: hidden;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+      z-index: 10;
+      position: relative;
+    }
+
+    .history-header {
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--neon-color);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      cursor: pointer;
+      background: rgba(0, 0, 0, 0.3);
+      transition: background 0.3s;
+    }
+
+    .history-header:hover {
+      background: rgba(255, 0, 127, 0.1);
+    }
+
+    .history-arrow {
+      transition: transform 0.3s ease;
+    }
+
+    .history-list {
+      max-height: 0;
+      overflow-y: auto;
+      transition: max-height 0.3s ease-in-out;
+      padding: 0 14px;
+    }
+
+    .history-list.open {
+      max-height: 150px;
+      padding: 8px 14px;
+    }
+
+    .history-item {
+      font-size: 11px;
+      color: #cccccc;
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .history-item:last-child {
+      border-bottom: none;
+    }
+
+    .history-item.empty {
+      text-align: center;
+      color: #777777;
+      font-style: italic;
+    }
+
+    /* REDES SOCIALES FLOTANTES */
     .player-social-container {
       display: flex;
       align-items: center;
@@ -321,16 +453,40 @@
       <!-- REPRODUCTOR -->
       <div id="extassisnetwork"></div>
 
-      <!-- ANUNCIADOR SIN CUADRO, DIRECTO SOBRE EL REPRODUCTOR -->
+      <!-- ANUNCIADOR DE CANCIÓN -->
       <div class="custom-song-display">
         <div class="song-label-indicator">Sonando Ahora</div>
         <div class="current-song-text" id="liveSongTitle">Cargando Canción...</div>
       </div>
 
-      <!-- CONTADOR DE OYENTES -->
-      <div class="live-listeners-count">🎧 Oyentes: <span id="listenersCount">0</span></div>
+      <!-- CONTENEDOR DE ESTADÍSTICAS Y ESTADO EN VIVO -->
+      <div class="stats-flex-container">
+        <!-- Contador de Oyentes -->
+        <div class="live-listeners-count">🎧 Oyentes: <span id="listenersCount">0</span></div>
+        <!-- Indicador de Conexión en Vivo (Debajo) -->
+        <div class="stream-status-badge">
+          <span class="status-dot"></span> EN VIVO
+        </div>
+      </div>
 
-      <!-- REDES SOCIALES DEBAJO DEL REPRODUCTOR -->
+      <!-- FRASES POÉTICAS DINÁMICAS -->
+      <div class="poetry-banner-container" id="poetryBanner">
+        <div class="poetry-icon"><i class="fas fa-feather-alt"></i></div>
+        <div class="poetry-text" id="poetryText">"Donde la música termina, la poesía comienza..."</div>
+      </div>
+
+      <!-- HISTORIAL DE CANCIONES -->
+      <div class="song-history-container">
+        <div class="history-header" id="toggleHistory">
+          <span><i class="fas fa-history"></i> Canciones Recientes</span>
+          <i class="fas fa-chevron-down history-arrow" id="historyArrow"></i>
+        </div>
+        <div class="history-list" id="historyList">
+          <div class="history-item empty">Esperando el historial...</div>
+        </div>
+      </div>
+
+      <!-- REDES SOCIALES -->
       <div class="player-social-container">
         <a href="https://wa.me/TU_NUMERO_AQUI" target="_blank" class="player-social-link wa" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
         <a href="https://instagram.com/TU_USUARIO" target="_blank" class="player-social-link ig" title="Instagram"><i class="fab fa-instagram"></i></a>
@@ -414,7 +570,74 @@
       document.removeEventListener('click', unlockAudio);
     }, { once: true });
 
-    /* Extractor del nombre de canción directamente al anunciador */
+    /* Frases poéticas rotativas */
+    const frasesPoeticas = [
+      "\"Donde la música termina, la poesía comienza...\"",
+      "\"El arte de la música es el que más cercano está a las lágrimas y a los recuerdos.\"",
+      "\"Las palabras son el eco de la música del alma.\"",
+      "\"Donde las palabras abandonan, la música habla.\"",
+      "\"Magia es todo aquello que nos hace sentir vivos a través del sonido.\""
+    ];
+
+    let indexFrase = 0;
+    const poetryElement = document.getElementById('poetryText');
+
+    setInterval(() => {
+      indexFrase = (indexFrase + 1) % frasesPoeticas.length;
+      poetryElement.style.opacity = 0;
+      setTimeout(() => {
+        poetryElement.innerText = frasesPoeticas[indexFrase];
+        poetryElement.style.opacity = 1;
+      }, 500);
+    }, 10000);
+
+    /* Control de apertura/cierre del acordeón de historial */
+    const toggleHistory = document.getElementById('toggleHistory');
+    const historyList = document.getElementById('historyList');
+    const historyArrow = document.getElementById('historyArrow');
+
+    toggleHistory.addEventListener('click', () => {
+      historyList.classList.toggle('open');
+      historyArrow.style.transform = historyList.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0deg)';
+    });
+
+    /* Array para almacenar las últimas canciones y evitar duplicados */
+    let songHistoryArray = [];
+    const maxHistoryItems = 5;
+
+    function agregarAlHistorial(nuevaCancion) {
+      if (!nuevaCancion || nuevaCancion === "Cargando Canción..." || nuevaCancion.includes("RADIO")) return;
+      
+      if (songHistoryArray.length > 0 && songHistoryArray[0] === nuevaCancion) return;
+
+      songHistoryArray.unshift(nuevaCancion);
+
+      if (songHistoryArray.length > maxHistoryItems) {
+        songHistoryArray.pop();
+      }
+
+      actualizarUIHistorial();
+    }
+
+    function actualizarUIHistorial() {
+      if (songHistoryArray.length === 0) {
+        historyList.innerHTML = '<div class="history-item empty">Aún no hay registros...</div>';
+        return;
+      }
+
+      let htmlContent = '';
+      for (let i = 1; i < songHistoryArray.length; i++) {
+        htmlContent += `<div class="history-item"><i class="fas fa-music" style="font-size:9px; margin-right:6px; color:#ff007f;"></i> ${songHistoryArray[i]}</div>`;
+      }
+
+      if (htmlContent === '') {
+        historyList.innerHTML = '<div class="history-item empty">Reproduciendo primera canción...</div>';
+      } else {
+        historyList.innerHTML = htmlContent;
+      }
+    }
+
+    /* Extractor del nombre de canción */
     setInterval(() => {
       $("#extassisnetwork").find("div, span, p, a").each(function() {
         const classNames = $(this).attr("class") || "";
@@ -426,8 +649,9 @@
           idName.includes("title")
         ) {
           const txt = $(this).text().trim();
-          if (txt.length > 2 && !txt.includes("RADIO BOHEMIOS")) {
+          if (txt.length > 2 && !txt.includes("RADIO")) {
             $("#liveSongTitle").text(txt);
+            agregarAlHistorial(txt);
           }
         }
       });
@@ -445,7 +669,10 @@
         success: function(data) {
           if (data) {
             if (data.currentlisteners !== undefined) elementListeners.innerText = data.currentlisteners;
-            if (data.songtitle) $("#liveSongTitle").text(data.songtitle);
+            if (data.songtitle) {
+              $("#liveSongTitle").text(data.songtitle);
+              agregarAlHistorial(data.songtitle);
+            }
           }
         },
         error: function() {
@@ -456,7 +683,10 @@
             success: function(data) {
               if (data) {
                 if (data.currentlisteners !== undefined) elementListeners.innerText = data.currentlisteners;
-                if (data.songtitle) $("#liveSongTitle").text(data.songtitle);
+                if (data.songtitle) {
+                  $("#liveSongTitle").text(data.songtitle);
+                  agregarAlHistorial(data.songtitle);
+                }
               }
             }
           });
