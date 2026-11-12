@@ -3,641 +3,224 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RADIO MAGIA Y POESIA</title>
+  <title>Radio Magia y Poesía</title>
   
-  <!-- Configuración PWA -->
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#120c1f">
+  <meta name="theme-color" content="#050505">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Radio Magia & Poesia">
-  <link rel="apple-touch-icon" href="https://i.postimg.cc/4xsZxS1f/cropped-circle-image.png">
-  
-  <!-- Fuentes Google -->
-  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-  
-  <!-- Íconos FontAwesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta name="apple-mobile-web-app-title" content="Magia y Poesía">
+  <link rel="apple-touch-icon" href="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=192&h=192&fit=crop">
 
-  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-  <script src="https://extassisnetwork.com/player/Luna/luna.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Tailwind CSS & FontAwesome -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
   <style>
-    :root { 
-      --neon-color: #39ff14; 
-      --pink-neon: #ff007f;
-      --dark-border: #1a1528;
-    }
-    html, body {
-      margin: 0; padding: 0; width: 100%; height: 100%;
-      background: linear-gradient(135deg, #0d0914, #180e29, #0a192f, #1a0826);
-      background-size: 400% 400%;
-      animation: bgGradientAnimation 15s ease infinite;
-      font-family: 'Be Vietnam', sans-serif; color: #ffffff; overflow-x: hidden;
-    }
-    @keyframes bgGradientAnimation {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-    
-    .main-container {
-      display: flex; 
-      flex-direction: column; 
-      align-items: center; 
-      justify-content: flex-start;
-      width: 100vw; 
-      min-height: 100vh; 
-      padding: 10px; 
-      box-sizing: border-box; 
-      position: relative;
-      gap: 12px;
-    }
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Plus+Jakarta+Sans:wght@300;400;500&display=swap');
 
-    /* BANNER SUPERIOR */
-    .live-dj-banner {
-      width: 100%; 
-      max-width: 100%; 
-      background: rgba(15, 12, 25, 0.85);
-      border: 2px solid var(--dark-border); 
-      border-radius: 12px; 
-      padding: 16px 16px; 
-      display: flex; 
-      align-items: center; 
-      justify-content: center; 
-      box-sizing: border-box;
-      backdrop-filter: blur(10px); 
-      position: relative; 
-      gap: 8px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
-    }
-
-    /* CONTENEDOR DEL REPRODUCTOR */
-    .player-wrapper {
-      width: 100%; 
-      max-width: 100%; 
-      background: rgba(15, 12, 25, 0.7);
-      border-radius: 16px; 
-      padding: 15px 10px 15px 10px; 
-      box-sizing: border-box;
-      position: relative; 
-      border: 2px solid var(--dark-border); 
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-    }
-
-    .brand-title-container { 
-      display: flex; flex-direction: column; align-items: center; justify-content: center; 
-      gap: 6px; text-align: center; width: 100%;
-    }
-
-    .brand-header-row {
-      display: inline-flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap;
-    }
-
-    .brand-icon { 
-      font-size: 36px; filter: drop-shadow(0 0 10px var(--pink-neon)); 
-      animation: floatIcon 2s ease-in-out infinite alternate; flex-shrink: 0; 
-    }
-    @keyframes floatIcon { 0% { transform: translateY(0) scale(1); } 100% { transform: translateY(-4px) scale(1.1); } }
-    
-    .brand-title {
-      font-family: 'Be Vietnam', sans-serif;
-      font-size: 44px;
-      font-weight: 900;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      background: linear-gradient(90deg, #ff007f, #00f3ff, #39ff14, #ff007f);
-      background-size: 300% 100%;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      animation: rainbowText 4s linear infinite;
-      filter: drop-shadow(0 0 14px rgba(255, 0, 127, 0.6)) drop-shadow(0 0 25px rgba(0, 243, 255, 0.4));
-      margin: 0;
-      text-align: center;
-      line-height: 1.15;
-    }
-    
-    /* CONTENEDOR DE ESTADÍSTICAS Y ESTADO (Columna Vertical) */
-    .stats-flex-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      margin-top: 10px;
-      z-index: 10;
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #050505;
+      color: #e5e5e5;
+      min-height: 100vh;
+      overflow-x: hidden;
       position: relative;
     }
 
-    /* CONTADOR DE OYENTES */
-    .live-listeners-count {
-      font-size: 13px; 
-      color: #dddddd; 
-      font-weight: 600; 
-      display: inline-flex; 
-      align-items: center; 
-      justify-content: center; 
-      gap: 6px;
-      background: rgba(0, 0, 0, 0.5); 
-      padding: 6px 14px; 
-      border-radius: 20px; 
-      border: 1px solid rgba(255, 255, 255, 0.15); 
-      filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.9));
-    }
-    .live-listeners-count span { color: var(--neon-color); font-weight: 800; }
-
-    /* INDICADOR DE ESTADO EN VIVO (Ubicado debajo del contador) */
-    .stream-status-badge {
-      font-size: 11px;
-      font-weight: 800;
-      color: var(--neon-color);
-      background: rgba(0, 0, 0, 0.5);
-      padding: 5px 12px;
-      border-radius: 20px;
-      border: 1px solid rgba(57, 255, 20, 0.3);
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      letter-spacing: 1px;
-      filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.9));
-    }
-    .status-dot {
-      width: 7px;
-      height: 7px;
-      background-color: var(--neon-color);
-      border-radius: 50%;
-      box-shadow: 0 0 8px var(--neon-color);
-      animation: blinkStatus 1.2s infinite ease-in-out;
-    }
-    @keyframes blinkStatus {
-      0%, 100% { opacity: 0.3; transform: scale(0.8); }
-      50% { opacity: 1; transform: scale(1.2); }
-    }
-
-    /* CONTENEDOR DE LUNA RADIO */
-    #extassisnetwork { 
-      width: 100%; 
-      height: 400px !important; 
-      border-radius: 12px; 
-      overflow: hidden; 
-      position: relative;
-      z-index: 1;
-    }
-
-    /* OCULTA EL TEXTO ORIGINAL DE LUNA RADIO */
-    #extassisnetwork .songtitle,
-    #extassisnetwork .song,
-    #extassisnetwork .artist,
-    #extassisnetwork .title,
-    #extassisnetwork [class*="song"],
-    #extassisnetwork [class*="artist"],
-    #extassisnetwork [class*="title"] {
-      display: none !important;
-      visibility: hidden !important;
-      opacity: 0 !important;
-      height: 0 !important;
-    }
-
-    /* ANUNCIADOR DE CANCIÓN */
-    .custom-song-display {
+    /* Fondo con efecto de nebulosa y destellos dorados mágicos y profundos */
+    .bg-nebula {
       position: absolute;
-      top: 235px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 90%;
-      z-index: 99;
-      background: transparent;
-      border: none;
-      box-shadow: none;
-      text-align: center;
-      box-sizing: border-box;
+      inset: 0;
+      overflow: hidden;
+      z-index: 0;
       pointer-events: none;
     }
 
-    .song-label-indicator {
-      font-size: 10px;
-      font-weight: 700;
-      color: var(--neon-color);
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      margin-bottom: 2px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.9));
+    .nebula-glow {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(191, 149, 63, 0.12) 0%, rgba(115, 89, 31, 0.04) 40%, transparent 70%);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation: pulseGlow 8s ease-in-out infinite alternate;
     }
 
-    .song-label-indicator::before,
-    .song-label-indicator::after {
-      content: '';
-      display: inline-block;
-      width: 5px; height: 5px;
-      background: var(--neon-color);
-      border-radius: 50%;
-      box-shadow: 0 0 6px var(--neon-color);
-      animation: pulseDot 1.5s infinite;
+    @keyframes pulseGlow {
+      0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.6; }
+      100% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
     }
-    @keyframes pulseDot { 0%, 100% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); } }
 
-    .current-song-text {
-      font-size: 16px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      line-height: 1.2;
-      background: linear-gradient(90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #00ffff, #0000ff, #8b00ff, #ff0000);
-      background-size: 300% 100%;
+    h1 {
+      font-family: 'Cinzel', serif;
+      letter-spacing: 0.15em;
+    }
+
+    .gold-gradient-text {
+      background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      animation: rainbowText 4s linear infinite;
-      filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.9));
-      margin: 0;
-      word-break: break-word;
+      filter: drop-shadow(0 0 25px rgba(191, 149, 63, 0.4));
     }
 
-    @keyframes rainbowText {
-      0% { background-position: 0% 50%; }
-      100% { background-position: 300% 50%; }
+    .gold-border {
+      border: 1px solid rgba(191, 149, 63, 0.35);
     }
 
-    /* BANNER DE POESÍA ROTATIVA */
-    .poetry-banner-container {
-      width: 90%;
-      background: rgba(12, 9, 20, 0.75);
-      border: 1px solid rgba(0, 243, 255, 0.25);
-      border-radius: 12px;
-      margin-top: 10px;
-      padding: 10px 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      backdrop-filter: blur(8px);
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-      z-index: 10;
-      position: relative;
-    }
-    .poetry-icon { color: #00f3ff; font-size: 14px; filter: drop-shadow(0 0 6px #00f3ff); }
-    .poetry-text {
-      font-size: 12px;
-      font-style: italic;
-      color: #e0e0e0;
-      text-align: center;
-      transition: opacity 0.5s ease;
-      letter-spacing: 0.5px;
+    .gold-glow {
+      box-shadow: 0 0 60px rgba(191, 149, 63, 0.2), inset 0 0 30px rgba(191, 149, 63, 0.12);
     }
 
-    /* HISTORIAL DE CANCIONES */
-    .song-history-container {
-      width: 90%;
-      background: rgba(12, 9, 20, 0.85);
-      border: 1px solid rgba(255, 0, 127, 0.25);
-      border-radius: 12px;
-      margin-top: 10px;
-      overflow: hidden;
-      backdrop-filter: blur(8px);
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-      z-index: 10;
-      position: relative;
+    .vinyl-spin {
+      animation: spin 16s linear infinite;
     }
 
-    .history-header {
-      padding: 10px 14px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--neon-color);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      cursor: pointer;
-      background: rgba(0, 0, 0, 0.3);
-      transition: background 0.3s;
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
 
-    .history-header:hover {
-      background: rgba(255, 0, 127, 0.1);
-    }
-
-    .history-arrow {
-      transition: transform 0.3s ease;
-    }
-
-    .history-list {
-      max-height: 0;
-      overflow-y: auto;
-      transition: max-height 0.3s ease-in-out;
-      padding: 0 14px;
-    }
-
-    .history-list.open {
-      max-height: 150px;
-      padding: 8px 14px;
-    }
-
-    .history-item {
-      font-size: 11px;
-      color: #cccccc;
-      padding: 6px 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .history-item:last-child {
-      border-bottom: none;
-    }
-
-    .history-item.empty {
-      text-align: center;
-      color: #777777;
-      font-style: italic;
-    }
-
-    /* REDES SOCIALES FLOTANTES */
-    .player-social-container {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 32px;
-      padding: 12px 10px 4px 10px;
-      background: transparent;
-      border: none;
-      box-shadow: none;
-      z-index: 10;
-      position: relative;
-    }
-    
-    .player-social-link {
-      font-size: 34px;
-      text-decoration: none;
-      display: inline-block;
-      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      background: linear-gradient(90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #00ffff, #0000ff, #8b00ff, #ff0000);
-      background-size: 300% 100%;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      animation: floatSocial 3s ease-in-out infinite alternate, rainbowText 4s linear infinite;
-      filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.3));
-    }
-
-    @keyframes floatSocial {
-      0% { transform: translateY(0); }
-      100% { transform: translateY(-4px); }
-    }
-
-    .player-social-link:nth-child(2) { animation-delay: 0.3s; }
-    .player-social-link:nth-child(3) { animation-delay: 0.6s; }
-    .player-social-link:nth-child(4) { animation-delay: 0.9s; }
-
-    .player-social-link:hover {
-      transform: translateY(-8px) scale(1.35) rotate(-6deg);
-      filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.8)) drop-shadow(0 0 20px rgba(0, 243, 255, 0.6));
-    }
-
-    .top-right-controls { position: fixed; top: 20px; right: 20px; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; z-index: 9999; }
-    .btn-install {
-      background: rgba(15, 12, 25, 0.85); border: 1.5px solid var(--dark-border); color: #ffffff;
-      padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: bold; cursor: pointer;
-      display: none; align-items: center; gap: 6px; backdrop-filter: blur(5px); box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-    }
-
-    @media (max-width: 768px) {
-      .brand-title { font-size: 26px; letter-spacing: 1px; }
-      .brand-icon { font-size: 24px; }
-      .brand-header-row { gap: 8px; }
-      .live-dj-banner { flex-direction: column; text-align: center; }
-      #extassisnetwork { height: 360px !important; }
-
-      .custom-song-display { top: 210px; }
-      .current-song-text { font-size: 14px; }
-      .player-social-container { gap: 22px; }
-      .player-social-link { font-size: 28px; }
+    .paused-anim {
+      animation-play-state: paused !important;
     }
   </style>
 </head>
-<body>
+<body class="flex flex-col items-center justify-between min-h-screen p-6 relative selection:bg-amber-500/30">
 
-  <div class="top-right-controls">
-    <button class="btn-install" id="btnInstall">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
-      </svg>
-      Instalar App
-    </button>
+  <!-- Fondo de Nebulosa Mística -->
+  <div class="bg-nebula">
+    <div class="nebula-glow"></div>
   </div>
 
-  <div class="main-container">
-    <!-- Banner superior -->
-    <div class="live-dj-banner" id="liveDjBanner">
-      <div class="brand-title-container">
-        <div class="brand-header-row">
-          <span class="brand-icon">🎙️✨</span>
-          <h1 class="brand-title">Radio Magia y Poesia</h1>
-          <span class="brand-icon">🎵✨</span>
+  <!-- Elemento oculto para escaneo DOM -->
+  <div id="extassisnetwork" style="display:none;"></div>
+
+  <!-- Cabecera Limpia de Lujo -->
+  <header class="text-center mt-6 z-10 w-full max-w-lg">
+    <h1 class="text-2xl sm:text-3xl font-bold uppercase gold-gradient-text mb-3">
+      Radio Magia y Poesía
+    </h1>
+    
+    <!-- Anuncio de canción actual -->
+    <div class="inline-flex items-center gap-2.5 px-5 py-2 rounded-full bg-neutral-950/85 gold-border shadow-2xl backdrop-blur-md">
+      <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+      <span id="liveSongTitle" class="text-neutral-300 text-xs sm:text-sm font-light tracking-wide truncate max-w-[260px]">Sintonizando esencia...</span>
+    </div>
+  </header>
+
+  <!-- Contenido Central: Vinilo Gigante Centrado -->
+  <main class="w-full max-w-md my-auto flex flex-col items-center z-10 py-4">
+    
+    <div class="relative w-64 h-64 sm:w-72 sm:h-72 rounded-full p-2.5 bg-neutral-900/40 gold-glow flex items-center justify-center mb-10">
+      <div id="vinylDisk" class="w-full h-full rounded-full bg-neutral-950 gold-border flex items-center justify-center relative shadow-2xl vinyl-spin paused-anim overflow-hidden">
+        
+        <!-- Carátula de música en alta definición -->
+        <img id="songCover" src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=500&h=500&fit=crop" alt="Carátula" class="absolute inset-0 w-full h-full object-cover opacity-70 transition-opacity duration-700">
+        
+        <!-- Textura de vinilo negro profundo -->
+        <div class="absolute inset-0 bg-[radial-gradient(circle,transparent_30%,rgba(5,5,5,0.95)_85%)] pointer-events-none"></div>
+        <div class="absolute inset-6 rounded-full border border-amber-500/10 pointer-events-none"></div>
+        <div class="absolute inset-14 rounded-full border border-amber-500/10 pointer-events-none"></div>
+        
+        <!-- Etiqueta central dorada -->
+        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-amber-600 via-amber-700 to-neutral-950 p-0.5 flex items-center justify-center shadow-2xl z-10 gold-border">
+          <div class="w-full h-full rounded-full bg-neutral-950 flex items-center justify-center">
+            <i class="fa-solid fa-compact-disc text-amber-400/90 text-lg"></i>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- Contenedor principal del reproductor -->
-    <div class="player-wrapper" id="playerWrapper">
-      
-      <!-- REPRODUCTOR -->
-      <div id="extassisnetwork"></div>
-
-      <!-- ANUNCIADOR DE CANCIÓN -->
-      <div class="custom-song-display">
-        <div class="song-label-indicator">Sonando Ahora</div>
-        <div class="current-song-text" id="liveSongTitle">Cargando Canción...</div>
-      </div>
-
-      <!-- CONTENEDOR DE ESTADÍSTICAS Y ESTADO EN VIVO -->
-      <div class="stats-flex-container">
-        <!-- Contador de Oyentes -->
-        <div class="live-listeners-count">🎧 Oyentes: <span id="listenersCount">0</span></div>
-        <!-- Indicador de Conexión en Vivo (Debajo) -->
-        <div class="stream-status-badge">
-          <span class="status-dot"></span> EN VIVO
-        </div>
-      </div>
-
-      <!-- FRASES POÉTICAS DINÁMICAS -->
-      <div class="poetry-banner-container" id="poetryBanner">
-        <div class="poetry-icon"><i class="fas fa-feather-alt"></i></div>
-        <div class="poetry-text" id="poetryText">"Donde la música termina, la poesía comienza..."</div>
-      </div>
-
-      <!-- HISTORIAL DE CANCIONES -->
-      <div class="song-history-container">
-        <div class="history-header" id="toggleHistory">
-          <span><i class="fas fa-history"></i> Canciones Recientes</span>
-          <i class="fas fa-chevron-down history-arrow" id="historyArrow"></i>
-        </div>
-        <div class="history-list" id="historyList">
-          <div class="history-item empty">Esperando el historial...</div>
-        </div>
-      </div>
-
-      <!-- REDES SOCIALES -->
-      <div class="player-social-container">
-        <a href="https://wa.me/TU_NUMERO_AQUI" target="_blank" class="player-social-link wa" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
-        <a href="https://instagram.com/TU_USUARIO" target="_blank" class="player-social-link ig" title="Instagram"><i class="fab fa-instagram"></i></a>
-        <a href="https://facebook.com/TU_PAGINA" target="_blank" class="player-social-link fb" title="Facebook"><i class="fab fa-facebook-f"></i></a>
-        <a href="https://tiktok.com/@TU_USUARIO" target="_blank" class="player-social-link tk" title="TikTok"><i class="fab fa-tiktok"></i></a>
-      </div>
+    <!-- Botón de Reproducción Minimalista Dorado -->
+    <div class="flex items-center justify-center mb-8">
+      <button id="btnPlay" class="w-20 h-20 rounded-full bg-neutral-950 hover:bg-neutral-900 text-amber-400 text-2xl flex items-center justify-center shadow-2xl transform active:scale-95 transition duration-300 gold-border group">
+        <i id="playIcon" class="fa-solid fa-play ml-1 group-hover:scale-110 transition-transform"></i>
+      </button>
     </div>
-  </div>
+
+    <!-- Oyentes Conectados -->
+    <div class="text-xs text-neutral-400 tracking-wider font-light flex items-center gap-2 bg-neutral-950/70 px-4 py-1.5 rounded-full gold-border backdrop-blur-sm">
+      <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+      <span>Oyentes: <strong id="listenersCount" class="font-medium text-amber-300">0</strong></span>
+    </div>
+
+  </main>
+
+  <!-- Pie Minimalista -->
+  <footer class="text-center text-[11px] text-neutral-500 tracking-widest uppercase z-10 mb-2">
+    <span>SEÑAL ONLINE RADIO MAGIA Y POESIA</span>
+  </footer>
+
+  <!-- Elemento de audio -->
+  <audio id="audioStream" src="https://streaming.viphosting.cl:8236/;stream.mp3" preload="none"></audio>
 
   <script>
-    /* Service Worker para PWA */
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js')
-          .then(reg => console.log('Service Worker registrado con éxito:', reg.scope))
-          .catch(err => console.log('Error al registrar Service Worker:', err));
-      });
-    }
+    const audio = document.getElementById('audioStream');
+    const btnPlay = document.getElementById('btnPlay');
+    const playIcon = document.getElementById('playIcon');
+    const vinylDisk = document.getElementById('vinylDisk');
+    const elementListeners = document.getElementById('listenersCount');
+    const songCover = document.getElementById('songCover');
 
-    /* Evento instalación PWA */
-    let deferredPrompt;
-    const btnInstall = document.getElementById('btnInstall');
+    let isPlaying = false;
+    let ultimaCancionProcesada = "";
 
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      btnInstall.style.display = 'flex';
-    });
-
-    btnInstall.addEventListener('click', async () => {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        const { outcome } = await deferredPrompt.userChoice;
-        if (outcome === 'accepted') {
-          console.log('El usuario aceptó instalar la app');
-        }
-        deferredPrompt = null;
-        btnInstall.style.display = 'none';
-      }
-    });
-
-    window.addEventListener('appinstalled', () => {
-      btnInstall.style.display = 'none';
-      console.log('App instalada correctamente');
-    });
-
-    /* Inicialización Luna Radio */
-    $("#extassisnetwork").lunaradio({
-      streamurl: "https://streaming.viphosting.cl:8236",
-      radioname: "",
-      coverimage: "https://i.postimg.cc/4xsZxS1f/cropped-circle-image.png",
-      onlycoverimage: false,
-      userinterface: "big",
-      backgroundcolor: "rgba(15, 12, 25, 0.7)",
-      fontcolor: "#ffffff",
-      hightlightcolor: "#ff007f",
-      fontname: "Be Vietnam",
-      googlefont: "Be Vietnam",
-      fontratio: "0.8",
-      scroll: "false",
-      coverstyle: "animated",
-      usevisualizer: "real",
-      visualizertype: "6",
-      streamtype: "shoutcast2",
-      shoutcastpath: "/stream",
-      shoutcastid: "1",
-      metadatainterval: "1000",
-      volume: "100",
-      autoplay: "false",
-      usestreamcorsproxy: "true"
-    });
-
-    /* Desbloqueador de contexto de audio */
-    document.addEventListener('click', function unlockAudio() {
-      const audioElements = document.querySelectorAll('audio');
-      audioElements.forEach(audio => {
-        if (audio.paused) {
-          audio.play().catch(() => {});
-        }
-      });
-      document.removeEventListener('click', unlockAudio);
-    }, { once: true });
-
-    /* Frases poéticas rotativas */
-    const frasesPoeticas = [
-      "\"Donde la música termina, la poesía comienza...\"",
-      "\"El arte de la música es el que más cercano está a las lágrimas y a los recuerdos.\"",
-      "\"Las palabras son el eco de la música del alma.\"",
-      "\"Donde las palabras abandonan, la música habla.\"",
-      "\"Magia es todo aquello que nos hace sentir vivos a través del sonido.\""
-    ];
-
-    let indexFrase = 0;
-    const poetryElement = document.getElementById('poetryText');
-
-    setInterval(() => {
-      indexFrase = (indexFrase + 1) % frasesPoeticas.length;
-      poetryElement.style.opacity = 0;
-      setTimeout(() => {
-        poetryElement.innerText = frasesPoeticas[indexFrase];
-        poetryElement.style.opacity = 1;
-      }, 500);
-    }, 10000);
-
-    /* Control de apertura/cierre del acordeón de historial */
-    const toggleHistory = document.getElementById('toggleHistory');
-    const historyList = document.getElementById('historyList');
-    const historyArrow = document.getElementById('historyArrow');
-
-    toggleHistory.addEventListener('click', () => {
-      historyList.classList.toggle('open');
-      historyArrow.style.transform = historyList.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0deg)';
-    });
-
-    /* Array para almacenar las últimas canciones y evitar duplicados */
-    let songHistoryArray = [];
-    const maxHistoryItems = 5;
-
-    function agregarAlHistorial(nuevaCancion) {
-      if (!nuevaCancion || nuevaCancion === "Cargando Canción..." || nuevaCancion.includes("RADIO")) return;
-      
-      if (songHistoryArray.length > 0 && songHistoryArray[0] === nuevaCancion) return;
-
-      songHistoryArray.unshift(nuevaCancion);
-
-      if (songHistoryArray.length > maxHistoryItems) {
-        songHistoryArray.pop();
-      }
-
-      actualizarUIHistorial();
-    }
-
-    function actualizarUIHistorial() {
-      if (songHistoryArray.length === 0) {
-        historyList.innerHTML = '<div class="history-item empty">Aún no hay registros...</div>';
-        return;
-      }
-
-      let htmlContent = '';
-      for (let i = 1; i < songHistoryArray.length; i++) {
-        htmlContent += `<div class="history-item"><i class="fas fa-music" style="font-size:9px; margin-right:6px; color:#ff007f;"></i> ${songHistoryArray[i]}</div>`;
-      }
-
-      if (htmlContent === '') {
-        historyList.innerHTML = '<div class="history-item empty">Reproduciendo primera canción...</div>';
+    btnPlay.addEventListener('click', () => {
+      if (isPlaying) {
+        audio.pause();
+        audio.src = "";
+        isPlaying = false;
+        playIcon.className = "fa-solid fa-play ml-1 group-hover:scale-110 transition-transform";
+        vinylDisk.classList.add('paused-anim');
       } else {
-        historyList.innerHTML = htmlContent;
+        audio.src = "https://streaming.viphosting.cl:8236/;stream.mp3";
+        audio.load();
+        audio.play().then(() => {
+          isPlaying = true;
+          playIcon.className = "fa-solid fa-pause group-hover:scale-110 transition-transform";
+          vinylDisk.classList.remove('paused-anim');
+        }).catch(err => {
+          console.error("Error al reproducir:", err);
+        });
+      }
+    });
+
+    function actualizarCaratula(terminoBusqueda) {
+      if (!terminoBusqueda) return;
+      const urlItunes = `https://itunes.apple.com/search?term=${encodeURIComponent(terminoBusqueda)}&entity=song&limit=1`;
+      
+      $.ajax({
+        url: urlItunes,
+        dataType: 'json',
+        success: function(response) {
+          if (response.results && response.results.length > 0) {
+            let artworkUrl = response.results[0].artworkUrl100;
+            if (artworkUrl) {
+              artworkUrl = artworkUrl.replace('100x100bb', '800x800bb');
+              songCover.src = artworkUrl;
+            }
+          }
+        }
+      });
+    }
+
+    function procesarNuevaCancion(tituloCrudo) {
+      if (!tituloCrudo) return;
+      let txt = tituloCrudo.trim();
+      
+      if (
+        txt.length > 2 && 
+        !txt.toUpperCase().includes("RADIO") && 
+        txt !== ultimaCancionProcesada
+      ) {
+        ultimaCancionProcesada = txt;
+        $("#liveSongTitle").text(txt);
+        actualizarCaratula(txt);
       }
     }
 
-    /* Extractor del nombre de canción */
     setInterval(() => {
       $("#extassisnetwork").find("div, span, p, a").each(function() {
         const classNames = $(this).attr("class") || "";
@@ -648,19 +231,15 @@
           idName.includes("song") ||
           idName.includes("title")
         ) {
-          const txt = $(this).text().trim();
-          if (txt.length > 2 && !txt.includes("RADIO")) {
-            $("#liveSongTitle").text(txt);
-            agregarAlHistorial(txt);
+          const txt = $(this).text();
+          if (txt) {
+            procesarNuevaCancion(txt);
           }
         }
       });
-    }, 800);
+    }, 1500);
 
-    /* Consulta de metadatos del streaming */
     function actualizarEstadisticas() {
-      const elementListeners = document.getElementById('listenersCount');
-
       $.ajax({
         url: "https://streaming.viphosting.cl:8236/stats?sid=1&json=1",
         dataType: "jsonp",
@@ -668,10 +247,11 @@
         timeout: 2500,
         success: function(data) {
           if (data) {
-            if (data.currentlisteners !== undefined) elementListeners.innerText = data.currentlisteners;
+            if (data.currentlisteners !== undefined && elementListeners) {
+              elementListeners.innerText = data.currentlisteners;
+            }
             if (data.songtitle) {
-              $("#liveSongTitle").text(data.songtitle);
-              agregarAlHistorial(data.songtitle);
+              procesarNuevaCancion(data.songtitle);
             }
           }
         },
@@ -682,10 +262,11 @@
             timeout: 2000,
             success: function(data) {
               if (data) {
-                if (data.currentlisteners !== undefined) elementListeners.innerText = data.currentlisteners;
+                if (data.currentlisteners !== undefined && elementListeners) {
+                  elementListeners.innerText = data.currentlisteners;
+                }
                 if (data.songtitle) {
-                  $("#liveSongTitle").text(data.songtitle);
-                  agregarAlHistorial(data.songtitle);
+                  procesarNuevaCancion(data.songtitle);
                 }
               }
             }
@@ -694,8 +275,52 @@
       });
     }
 
-    setInterval(actualizarEstadisticas, 3000);
+    setInterval(actualizarEstadisticas, 10000);
     actualizarEstadisticas();
+
+    // Service Worker PWA
+    if ('serviceWorker' in navigator) {
+      const swCode = `
+        self.addEventListener('install', e => self.skipWaiting());
+        self.addEventListener('activate', e => e.waitUntil(clients.claim()));
+        self.addEventListener('fetch', e => {
+          e.respondWith(
+            fetch(e.request).catch(() => caches.match(e.request))
+          );
+        });
+      `;
+      const swBlob = new Blob([swCode], { type: 'text/javascript' });
+      const swUrl = URL.createObjectURL(swBlob);
+      navigator.serviceWorker.register(swUrl).catch(err => console.log('SW reg failed', err));
+    }
+
+    // Manifest PWA dinámico
+    const manifestData = {
+      "name": "Radio Magia y Poesía",
+      "short_name": "Magia y Poesía",
+      "start_url": "./",
+      "display": "standalone",
+      "background_color": "#050505",
+      "theme_color": "#050505",
+      "icons": [
+        {
+          "src": "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=192&h=192&fit=crop",
+          "sizes": "192x192",
+          "type": "image/jpeg"
+        },
+        {
+          "src": "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=512&h=512&fit=crop",
+          "sizes": "512x512",
+          "type": "image/jpeg"
+        }
+      ]
+    };
+    const manifestBlob = new Blob([JSON.stringify(manifestData)], { type: 'application/json' });
+    const manifestURL = URL.createObjectURL(manifestBlob);
+    const linkManifest = document.createElement('link');
+    linkManifest.rel = 'manifest';
+    linkManifest.href = manifestURL;
+    document.head.appendChild(linkManifest);
   </script>
 </body>
 </html>
