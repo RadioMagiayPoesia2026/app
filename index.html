@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Radio Magia y Poesía</title>
   
-  <meta name="theme-color" content="#050505">
+  <meta name="theme-color" content="#090d16">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Magia y Poesía">
@@ -17,20 +17,20 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Plus+Jakarta+Sans:wght@300;400;500&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap');
 
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      background: #050505;
-      color: #e5e5e5;
+      background: #090d16;
+      color: #f3f4f6;
       min-height: 100vh;
       overflow-x: hidden;
       position: relative;
     }
 
-    /* Fondo con efecto de nebulosa y destellos dorados mágicos y profundos */
+    /* Fondo de ondas y malla 3D en toda la página */
     .bg-nebula {
-      position: absolute;
+      position: fixed;
       inset: 0;
       overflow: hidden;
       z-index: 0;
@@ -39,9 +39,9 @@
 
     .nebula-glow {
       position: absolute;
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(circle, rgba(191, 149, 63, 0.12) 0%, rgba(115, 89, 31, 0.04) 40%, transparent 70%);
+      width: 900px;
+      height: 900px;
+      background: radial-gradient(circle, rgba(5, 217, 232, 0.12) 0%, rgba(168, 85, 247, 0.1) 40%, transparent 70%);
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
@@ -49,8 +49,8 @@
     }
 
     @keyframes pulseGlow {
-      0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.6; }
-      100% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+      0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.4; }
+      100% { transform: translate(-50%, -50%) scale(1.3); opacity: 0.8; }
     }
 
     h1 {
@@ -58,19 +58,35 @@
       letter-spacing: 0.15em;
     }
 
-    .gold-gradient-text {
-      background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
+    .vibrant-gradient-text {
+      background: linear-gradient(135deg, #05d9e8 0%, #39ff14 30%, #ffae00 70%, #ff2a6d 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      filter: drop-shadow(0 0 25px rgba(191, 149, 63, 0.4));
+      filter: drop-shadow(0 0 25px rgba(5, 217, 232, 0.4));
     }
 
-    .gold-border {
-      border: 1px solid rgba(191, 149, 63, 0.35);
+    .neon-border {
+      border: 1px solid rgba(5, 217, 232, 0.35);
     }
 
-    .gold-glow {
-      box-shadow: 0 0 60px rgba(191, 149, 63, 0.2), inset 0 0 30px rgba(191, 149, 63, 0.12);
+    /* Animación para el borde LED RGB giratorio */
+    @keyframes rgbSpin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .animate-rgb-spin {
+      animation: rgbSpin 5s linear infinite;
+    }
+
+    /* Animación sutil de la malla de ondas de fondo */
+    @keyframes meshWaveFull {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-8px) scale(1.02); }
+    }
+
+    .cyber-grid-bg {
+      animation: meshWaveFull 6s ease-in-out infinite;
     }
 
     .vinyl-spin {
@@ -87,70 +103,110 @@
     }
   </style>
 </head>
-<body class="flex flex-col items-center justify-between min-h-screen p-6 relative selection:bg-amber-500/30">
+<body class="flex flex-col items-center justify-between min-h-screen p-6 relative selection:bg-cyan-500/30">
 
-  <!-- Fondo de Nebulosa Mística -->
+  <!-- Fondo de Malla 3D y Nebulosa por Toda la Página -->
   <div class="bg-nebula">
     <div class="nebula-glow"></div>
+    <div class="absolute inset-0 opacity-35 cyber-grid-bg flex items-center justify-center">
+      <svg class="w-full h-full min-h-screen object-cover filter drop-shadow-[0_0_12px_rgba(5,217,232,0.5)]" viewBox="0 0 1200 800" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="fullCyberGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#05d9e8" />
+            <stop offset="35%" stop-color="#39ff14" />
+            <stop offset="70%" stop-color="#ffae00" />
+            <stop offset="100%" stop-color="#ff2a6d" />
+          </linearGradient>
+        </defs>
+        
+        <!-- Líneas de cuadrícula en perspectiva de fondo -->
+        <g stroke="url(#fullCyberGradient)" stroke-width="0.7" fill="none" opacity="0.35">
+          <line x1="0" y1="150" x2="1200" y2="150" />
+          <line x1="0" y1="300" x2="1200" y2="300" />
+          <line x1="0" y1="450" x2="1200" y2="450" />
+          <line x1="0" y1="600" x2="1200" y2="600" />
+          <line x1="0" y1="750" x2="1200" y2="750" />
+          <line x1="150" y1="0" x2="250" y2="800" />
+          <line x1="350" y1="0" x2="450" y2="800" />
+          <line x1="600" y1="0" x2="600" y2="800" />
+          <line x1="850" y1="0" x2="750" y2="800" />
+          <line x1="1050" y1="0" x2="950" y2="800" />
+        </g>
+
+        <!-- Ondas principales repartidas por la pantalla -->
+        <path d="M0,350 Q150,250 300,350 T600,350 T900,350 T1200,350" fill="none" stroke="url(#fullCyberGradient)" stroke-width="2" opacity="0.6"></path>
+        <path d="M0,500 Q150,400 300,500 T600,500 T900,500 T1200,500" fill="none" stroke="url(#fullCyberGradient)" stroke-width="3" opacity="0.8"></path>
+        <path d="M0,200 Q150,100 300,200 T600,200 T900,200 T1200,200" fill="none" stroke="url(#fullCyberGradient)" stroke-width="1.5" opacity="0.4"></path>
+        <path d="M0,650 Q150,550 300,650 T600,650 T900,650 T1200,650" fill="none" stroke="url(#fullCyberGradient)" stroke-width="1.5" opacity="0.4"></path>
+      </svg>
+    </div>
   </div>
 
   <!-- Elemento oculto para escaneo DOM -->
   <div id="extassisnetwork" style="display:none;"></div>
 
-  <!-- Cabecera Limpia de Lujo -->
-  <header class="text-center mt-6 z-10 w-full max-w-lg">
-    <h1 class="text-2xl sm:text-3xl font-bold uppercase gold-gradient-text mb-3">
+  <!-- Cabecera Moderna -->
+  <header class="text-center mt-6 z-10 w-full max-w-lg flex flex-col items-center">
+    <h1 class="text-2xl sm:text-3xl font-bold uppercase vibrant-gradient-text mb-3">
       Radio Magia y Poesía
     </h1>
     
     <!-- Anuncio de canción actual -->
-    <div class="inline-flex items-center gap-2.5 px-5 py-2 rounded-full bg-neutral-950/85 gold-border shadow-2xl backdrop-blur-md">
-      <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
-      <span id="liveSongTitle" class="text-neutral-300 text-xs sm:text-sm font-light tracking-wide truncate max-w-[260px]">Sintonizando esencia...</span>
+    <div class="inline-flex items-center gap-2.5 px-5 py-2 rounded-full bg-slate-900/90 neon-border shadow-2xl backdrop-blur-md mb-2.5">
+      <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+      <span id="liveSongTitle" class="text-slate-300 text-xs sm:text-sm font-light tracking-wide truncate max-w-[260px]">Sintonizando esencia...</span>
+    </div>
+
+    <!-- Oyentes Conectados (Debajo del anuncio) -->
+    <div class="text-xs text-slate-300 tracking-wider font-light inline-flex items-center gap-2 bg-slate-900/90 px-4 py-1.5 rounded-full neon-border backdrop-blur-sm">
+      <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+      <span>Oyentes: <strong id="listenersCount" class="font-medium text-pink-400">0</strong></span>
     </div>
   </header>
 
-  <!-- Contenido Central: Vinilo Gigante Centrado -->
+  <!-- Contenido Central: Vinilo con Borde LED RGB Giratorio -->
   <main class="w-full max-w-md my-auto flex flex-col items-center z-10 py-4">
     
-    <div class="relative w-64 h-64 sm:w-72 sm:h-72 rounded-full p-2.5 bg-neutral-900/40 gold-glow flex items-center justify-center mb-10">
-      <div id="vinylDisk" class="w-full h-full rounded-full bg-neutral-950 gold-border flex items-center justify-center relative shadow-2xl vinyl-spin paused-anim overflow-hidden">
+    <!-- Contenedor exterior con borde LED RGB dinámico -->
+    <div class="relative w-64 h-64 sm:w-72 sm:h-72 rounded-full p-[4px] overflow-hidden shadow-[0_0_40px_rgba(5,217,232,0.3)] mb-8 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm">
+      
+      <!-- Capa de colores LED giratorios -->
+      <div class="absolute inset-0 rounded-full overflow-hidden pointer-events-none">
+        <div class="absolute -inset-[50%] bg-[conic-gradient(from_0deg,#ff2a6d,#05d9e8,#39ff14,#ffae00,#ff2a6d)] animate-rgb-spin opacity-90 blur-[1px]"></div>
+      </div>
+
+      <!-- Disco de vinilo interior -->
+      <div id="vinylDisk" class="w-full h-full rounded-full bg-slate-950 flex items-center justify-center relative shadow-2xl vinyl-spin paused-anim overflow-hidden z-10">
         
         <!-- Carátula de música en alta definición -->
-        <img id="songCover" src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=500&h=500&fit=crop" alt="Carátula" class="absolute inset-0 w-full h-full object-cover opacity-70 transition-opacity duration-700">
+        <img id="songCover" src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=500&h=500&fit=crop" alt="Carátula" class="absolute inset-0 w-full h-full object-cover opacity-75 transition-opacity duration-700">
         
-        <!-- Textura de vinilo negro profundo -->
-        <div class="absolute inset-0 bg-[radial-gradient(circle,transparent_30%,rgba(5,5,5,0.95)_85%)] pointer-events-none"></div>
-        <div class="absolute inset-6 rounded-full border border-amber-500/10 pointer-events-none"></div>
-        <div class="absolute inset-14 rounded-full border border-amber-500/10 pointer-events-none"></div>
+        <!-- Textura de vinilo profunda y moderna -->
+        <div class="absolute inset-0 bg-[radial-gradient(circle,transparent_30%,rgba(9,13,22,0.95)_85%)] pointer-events-none"></div>
+        <div class="absolute inset-6 rounded-full border border-cyan-500/20 pointer-events-none"></div>
+        <div class="absolute inset-14 rounded-full border border-pink-500/20 pointer-events-none"></div>
         
-        <!-- Etiqueta central dorada -->
-        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-amber-600 via-amber-700 to-neutral-950 p-0.5 flex items-center justify-center shadow-2xl z-10 gold-border">
-          <div class="w-full h-full rounded-full bg-neutral-950 flex items-center justify-center">
-            <i class="fa-solid fa-compact-disc text-amber-400/90 text-lg"></i>
+        <!-- Etiqueta central colorida -->
+        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-cyan-500 via-purple-600 to-pink-500 p-0.5 flex items-center justify-center shadow-2xl z-10 neon-border">
+          <div class="w-full h-full rounded-full bg-slate-950 flex items-center justify-center">
+            <i class="fa-solid fa-compact-disc text-cyan-400 text-lg"></i>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Botón de Reproducción Minimalista Dorado -->
-    <div class="flex items-center justify-center mb-8">
-      <button id="btnPlay" class="w-20 h-20 rounded-full bg-neutral-950 hover:bg-neutral-900 text-amber-400 text-2xl flex items-center justify-center shadow-2xl transform active:scale-95 transition duration-300 gold-border group">
+    <!-- Botón de Reproducción Moderno -->
+    <div class="flex items-center justify-center">
+      <button id="btnPlay" class="w-20 h-20 rounded-full bg-gradient-to-tr from-cyan-500 to-pink-500 hover:from-cyan-400 hover:to-pink-400 text-white text-2xl flex items-center justify-center shadow-[0_0_30px_rgba(5,217,232,0.4)] transform active:scale-95 transition duration-300 group">
         <i id="playIcon" class="fa-solid fa-play ml-1 group-hover:scale-110 transition-transform"></i>
       </button>
     </div>
 
-    <!-- Oyentes Conectados -->
-    <div class="text-xs text-neutral-400 tracking-wider font-light flex items-center gap-2 bg-neutral-950/70 px-4 py-1.5 rounded-full gold-border backdrop-blur-sm">
-      <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
-      <span>Oyentes: <strong id="listenersCount" class="font-medium text-amber-300">0</strong></span>
-    </div>
-
   </main>
 
-  <!-- Pie Minimalista -->
-  <footer class="text-center text-[11px] text-neutral-500 tracking-widest uppercase z-10 mb-2">
-    <span> RADIO MAGIA Y POESIA  @BaRT Entretenimientos</span>
+  <!-- Pie Moderno -->
+  <footer class="text-center text-[11px] text-slate-400 tracking-widest uppercase z-10 mb-2 bg-slate-950/60 px-4 py-1 rounded-full backdrop-blur-sm neon-border">
+    <span>Radio Magia y Poesia &nbsp;- @BaRT Corporation</span>
   </footer>
 
   <!-- Elemento de audio -->
@@ -300,8 +356,8 @@
       "short_name": "Magia y Poesía",
       "start_url": "./",
       "display": "standalone",
-      "background_color": "#050505",
-      "theme_color": "#050505",
+      "background_color": "#090d16",
+      "theme_color": "#090d16",
       "icons": [
         {
           "src": "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=192&h=192&fit=crop",
